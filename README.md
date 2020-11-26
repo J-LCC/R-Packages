@@ -18,6 +18,16 @@ R es un ecosistema gigantesco, el cual aloja cientos y cientos de librerías par
 
 ### SummaryTools
 
+```r
+library(ISLR)
+library(summarytools)
+library(dplyr)
+
+# Seleccionamos algunas columnas 
+Datos <- Credit %>% select(Ethnicity, Balance, Income, Limit, Rating)
+view(dfSummary(Datos))
+```
+
 ### Reactable
 
 ### Esquisse
