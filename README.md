@@ -177,7 +177,7 @@ stats <- attStats(boruta_output)
 result <- stats %>%
                 select(meanImp, decision) %>%
                 arrange(desc(meanImp))
-pander::pander(result, justify = "center")
+pander::pander(result)
 ```
 
 ![2](https://user-images.githubusercontent.com/54073772/100379088-9f002c80-3014-11eb-9f9c-67a2a8247e79.png)
