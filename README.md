@@ -62,7 +62,7 @@ view(stats_by_ethnicity)
 
 La librería ha sido desarrollada por Dominic Comtois, puedes consultar todas sus funcionalidades en el siguiente link: 
 
-https://cran.r-project.org/web/packages/summarytools/vignettes/Introduction.html#descr
+[Documentación acerca de SummaryTools](https://cran.r-project.org/web/packages/summarytools/vignettes/Introduction.html)
 
 
 ### Reactable
@@ -97,7 +97,7 @@ reactable(Datos, groupBy = "Ethnicity", columns = list(
 
 La librería ha sido desarrollada por Greg Lin y puedes consultar toda la información en el siguiente link:
 
-https://glin.github.io/reactable/index.html
+[Documentación acerca de Reactable](https://glin.github.io/reactable/index.html)
 
 ### Esquisse
 
@@ -118,6 +118,10 @@ Donde tendremos que seleccionar un data.frame cargado en el espacio de trabajo. 
 Ahora, simplemente arrastramos las variables a su casilla correspondiente según como lo queremos visualizar. A modo de ejemplo, vamos a crear un histograma, mostrando los Ingresos por Etnia, y por género.
 
 ![2](https://user-images.githubusercontent.com/54073772/100376243-76c1ff00-300f-11eb-930c-6af695b485c1.gif)
+
+Esquisse ha sido desarrollado por Fanny Meyer, puedes consultar sobre el paquete en el siguiente link:
+
+[Documentación sobre Esquisse](https://dreamrs.github.io/esquisse/index.html)
 
 ## Ingeniería de características 
 
@@ -186,4 +190,4 @@ El elevado valor del Z-Score nos ayuda a clarificar cuales variables son las má
 
 La librería ha sido desarrollada por Miron Bartosz Kursa y puedes ampliar conocimientos aquí:
 
-https://www.datacamp.com/community/tutorials/feature-selection-R-boruta
+[Documentación sobre Boruta](https://www.datacamp.com/community/tutorials/feature-selection-R-boruta)
