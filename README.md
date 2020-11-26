@@ -14,7 +14,7 @@ R es un ecosistema gigantesco, el cual aloja cientos y cientos de librerías par
   * [Boruta](#boruta)
 
 
-## Análisis descriptivo
+## Análisis descriptivo y visualización
 
 ### SummaryTools
 
