@@ -6,7 +6,7 @@ R es un ecosistema gigantesco, el cual aloja cientos y cientos de librerías par
 
 ## Tabla de contenidos
 
-- [Análisis descriptivo](#análisis-descriptivo)
+- [Análisis descriptivo y visualización](#análisis-descriptivo-y-visualización)
   * [SummaryTools](#summarytools)
   * [Reactable](#reactable)
   * [Esquisse](#esquisse)
