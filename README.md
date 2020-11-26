@@ -1,5 +1,3 @@
-# Paquetes de R para la ciencia de datos
-
 R es un ecosistema gigantesco, el cual aloja cientos y cientos de librerías para una cantidad enorme de propósitos. En este extenso documento, os quiero traer algunas de las librerías más útiles y no muy conocidas, para que realices un análisis de tus datos de una forma **eficiente, sencilla y con una fantástica presentación**. Las librerías se dividen por apartados según su propósito y la mayoría usarán el mismo data.frame de ejemplo, Credit del paquete ISLR.
 
 ![Captura](https://user-images.githubusercontent.com/54073772/100348219-ea034b00-2fe6-11eb-8190-7a7d54218022.PNG)
@@ -14,11 +12,11 @@ R es un ecosistema gigantesco, el cual aloja cientos y cientos de librerías par
   * [Boruta](#boruta)
 
 
-## Análisis descriptivo y visualización
+# Análisis descriptivo y visualización
 
 El tratamiento inicial de los datos y su correcta compresión es uno de los pasos más importantes dentro de un estudio de ciencia de datos. Por ello, es muy necesario valerse de librerías que nos **permitan la mejor compresión inicial en los datos.**
 
-### SummaryTools
+## SummaryTools
 
 Ofrece un conjunto coherente de funciones centradas en la exploración de datos y la presentación de informes sencillos. Aunque tiene varias funcionalidades, os quiero mostrar la que me ha parecido más interesante, ``dfSummary()``
 
@@ -65,7 +63,7 @@ La librería ha sido desarrollada por Dominic Comtois, puedes consultar todas su
 [Documentación acerca de SummaryTools](https://cran.r-project.org/web/packages/summarytools/vignettes/Introduction.html)
 
 
-### Reactable
+## Reactable
 
 El paquete reactable nos permite crear tablas interactivas con una cantidad increíble de personalización. Nos permite filtrar, ordenar, agrupar, crear medidas de agregación, etc. A modo de ejemplo, volvemos a usar el dataset Credit de ISLR para mostrar un par de funcionalidades (en su web oficial podemos consultar una gran cantidad de funciones).
 
@@ -99,7 +97,7 @@ La librería ha sido desarrollada por Greg Lin y puedes consultar toda la inform
 
 [Documentación acerca de Reactable](https://glin.github.io/reactable/index.html)
 
-### Esquisse
+## Esquisse
 
 **¿Te imaginas poder crear visualizaciones como en Tableau pero en R?** El paquete Esquisse implementa un formato sencillo de crear gráficos de “arrastrar y soltar” para un mapeo rápido de tus variables.
 Es extremadamente sencillo de usar y muy practico si queremos realizar un análisis rápido. OJO porque es muy limitado y sus opciones se quedan algo cortas. Sin embargo, para alguien que busque mostrar visualizaciones rápidamente sin tener que escribir código puede llegar a darle un entendimiento inicial muy útil.
@@ -123,11 +121,11 @@ Esquisse ha sido desarrollado por Fanny Meyer, puedes consultar sobre el paquete
 
 [Documentación sobre Esquisse](https://dreamrs.github.io/esquisse/index.html)
 
-## Ingeniería de características 
+# Ingeniería de características 
 
 El segundo paso importante dentro de un trabajo de ciencia de datos es conocer en profundidad nuestras variables, tratarlas en el caso de que existan valores nulos, atípicos, etc y por último seleccionar aquellas que sean significativas. 
 
-### Boruta
+## Boruta
 
 Boruta es un algoritmo de selección de características basado en Random Forest. Esto tiene la ventaja de decidir claramente que variables son las más importantes de cara a producir un modelo más preciso, evitando añadir ruido o variables inútiles. Por su parte, *Random Forest* es un algoritmo denominado en inglés “ensemble algorithms”, estos algoritmos combinan múltiples modelos para crear predicciones más potentes, aunque también significa aumentar el coste computacional. 
 
