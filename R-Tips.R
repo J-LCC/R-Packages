@@ -6,7 +6,7 @@
 # Una de las funciones más utiles es dfSummary()
 # Con esta función mostramos los estadisticos principales, tipo de dato, valores nulos
 
-# Mostramos un ejemplo con Defaul dataset
+# Mostramos un ejemplo con Credit dataset
 
 # Cargamos las librerías necesarias
 
@@ -52,6 +52,8 @@ reactable(Datos, searchable = TRUE,
           defaultSorted = "Income")
 
 # Y lo más interesante, agregar funciones de agregación
+# Por ejemplo, agrupar por etnia y calcular para cada clase, la media de ingresos y balance
+# y las frecuencia de las variables categoricas
 
 Datos <- Credit %>% select(Income,Balance,Age,Gender, Student, Married, Ethnicity)
 
@@ -72,7 +74,8 @@ rm(list = ls())
 
 # --------------------- Esquisse ------------------------------------
 
-#install.packages("esquisse")
+# Es una librería que nos permite crear graficos en una ventana interactiva
+# Aunque es limitado, permite un análisis rápido
 
 
 esquisse::esquisser()
@@ -87,6 +90,7 @@ datos <- Credit
 # ----- INGENIERÍA DE CARACTERÍSTICAS -----
 # ------------------ BORUTA ----------------------
 
+# Boruta nos permite una selección efectiva de variables mediante un algoritmo interactivo
 library(Boruta)
 library(ISLR)
 library(dplyr)
@@ -128,6 +132,20 @@ pander::pander(result)
 rm(list = ls())
 
 
+# ----------------- mice, VIM ----------------------------
 
+# mice realiza multiples imputaciones de NAs
+# mice() crea el modelo, dm controla el número de veces que se imputa
+# complete() aplica la imputación a los datos
+
+library(mice)
+
+methods(mice)
+
+# Vamos a usar Credit y asignar unos cuantos valores nulos de forma aleatoria
+Datos <- Credit
+
+Datos[sample(1:nrow(Datos), 20), "Income"] <- NA
+Datos[sample(1:nrow(Datos), 20), "Age"] <- NA
 
 
