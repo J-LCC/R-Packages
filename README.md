@@ -12,7 +12,7 @@ R es un ecosistema gigantesco, el cual aloja cientos y cientos de librerías par
   * [Esquisse](#esquisse)
 - [Ingeniería de características](#ingeniería-de-características)
   * [Boruta](#boruta)
-  * [Mice] (#Mice)
+  * [Mice](#mice)
 
 
 # Análisis descriptivo y visualización
