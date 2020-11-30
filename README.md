@@ -185,7 +185,7 @@ result <- stats %>%
 pander::pander(result)
 ```
 
-![2](https://user-images.githubusercontent.com/54073772/100379088-9f002c80-3014-11eb-9f9c-67a2a8247e79.png)
+![Captura](https://user-images.githubusercontent.com/54073772/100618129-b3e20600-331b-11eb-9055-f1c2b21465b9.PNG)
 
 El elevado valor del Z-Score nos ayuda a clarificar cuales variables son las más importantes, y aunque el modelo consideré la variable Age como “Confirmed”, queda muy lejos en importancia frente a las 4 primeras variables.
 
