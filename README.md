@@ -12,6 +12,7 @@ R es un ecosistema gigantesco, el cual aloja cientos y cientos de librerías par
   * [Esquisse](#esquisse)
 - [Ingeniería de características](#ingeniería-de-características)
   * [Boruta](#boruta)
+  * [Mice] (#Mice)
 
 
 # Análisis descriptivo y visualización
@@ -191,3 +192,5 @@ El elevado valor del Z-Score nos ayuda a clarificar cuales variables son las má
 La librería ha sido desarrollada por Miron Bartosz Kursa y puedes ampliar conocimientos aquí:
 
 [Documentación sobre Boruta](https://www.datacamp.com/community/tutorials/feature-selection-R-boruta)
+
+## Mice
