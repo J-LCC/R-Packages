@@ -1,8 +1,8 @@
-R es un ecosistema gigantesco, el cual aloja cientos y cientos de librerías para una cantidad enorme de propósitos. En este extenso documento, os quiero traer algunas de las librerías más útiles y no muy conocidas, para que realices un análisis de tus datos de una forma **eficiente, sencilla y con una fantástica presentación**. Las librerías se dividen por apartados según su propósito y la mayoría usarán el mismo data.frame de ejemplo, Credit del paquete ISLR.
+R es un ecosistema gigantesco, el cual aloja cientos y cientos de librerías para una cantidad enorme de propósitos. En este extenso documento, os quiero traer algunas de las librerías más útiles y no muy conocidas, para que realices un análisis de tus datos de una forma **eficiente, sencilla y con una fantástica presentación**. Las librerías se dividen por apartados según su propósito y la mayoría usarán el mismo data.frame de ejemplo, ``Credit`` del paquete ``ISLR``.
 
 {EN CONSTRUCCIÓN}
 
-![Captura](https://user-images.githubusercontent.com/54073772/100348219-ea034b00-2fe6-11eb-8190-7a7d54218022.PNG)
+![Captura](https://user-images.githubusercontent.com/54073772/100720470-52bf3e80-33be-11eb-83b7-dfffe0a9bd13.PNG)
 
 ## Tabla de contenidos
 
@@ -29,7 +29,7 @@ Esta función nos permite visualizar las variables alojadas en un dataframe, mos
 -	Gráficos de distribución.
 -	Valores nulos
 
-A modo de ejemplo vamos a usar el dataset Credit del paquete ISLR. Esta base de datos de ejemplo incluye 10000 observaciones sobre clientes con diversas variables como los ingresos, balance, genero, etnia, etc.
+A modo de ejemplo vamos a usar el dataset ``Credit`` del paquete ``ISLR``. Esta base de datos de ejemplo incluye 10000 observaciones sobre clientes con diversas variables como los ingresos, balance, genero, etnia, etc.
 
 ```r
 library(ISLR)
@@ -68,7 +68,7 @@ La librería ha sido desarrollada por Dominic Comtois, puedes consultar todas su
 
 ## Reactable
 
-El paquete reactable nos permite crear tablas interactivas con una cantidad increíble de personalización. Nos permite filtrar, ordenar, agrupar, crear medidas de agregación, etc. A modo de ejemplo, volvemos a usar el dataset Credit de ISLR para mostrar un par de funcionalidades (en su web oficial podemos consultar una gran cantidad de funciones).
+El paquete reactable nos permite crear tablas interactivas con una cantidad increíble de personalización. Nos permite filtrar, ordenar, agrupar, crear medidas de agregación, etc. A modo de ejemplo, volvemos a usar el dataset ``Credit`` de ``ISLR`` para mostrar un par de funcionalidades (en su web oficial podemos consultar una gran cantidad de funciones).
 
 Convertimos toda el dataset en una tabla con ``reactable()`` y añadimos un par de opciones, que aparezca una barra de búsqueda y ordenar de forma descendente los ingresos.
 
@@ -176,7 +176,7 @@ print(boruta_signif)
 
 [1] "Income"  "Limit"   "Rating"  "Age"     "Student"
 
-En attStats se almacenan los scores de las variables, así como la decisión tomada, para cada una de las variables. meanlmp es la media de puntuación que ha recibido cada variable en el Z-Score.
+En ``attStats`` se almacenan los scores de las variables, así como la decisión tomada, para cada una de las variables. meanlmp es la media de puntuación que ha recibido cada variable en el Z-Score.
 ```r
 stats <- attStats(boruta_output)
 result <- stats %>%
@@ -194,3 +194,48 @@ La librería ha sido desarrollada por Miron Bartosz Kursa y puedes ampliar conoc
 [Documentación sobre Boruta](https://www.datacamp.com/community/tutorials/feature-selection-R-boruta)
 
 ## Mice
+
+Proporciona una serie de características avanzadas para el tratamiento de valores nulos. mice tiene varias formas de imputar los valores nulos, podemos consultar los diferentes métodos con ``methods(mice)``. La ventaja de mice es su versatilidad, podemos probar varios métodos de imputación y ver cual se ajusta mejor a los datos y cual obtiene una mayor precisión.
+
+mice se divide en dos partes diferenciadas, por un lado, tenemos ``mice(df)``, que produce múltiples copias completas del ``df``, cada una con diferentes imputaciones de los datos que faltan. La función ``complete()`` devuelve uno o varios de estos conjuntos de datos imputados, siendo el predeterminado el primero, pero pudiendo escoger entre varias de las imputaciones hechas por el modelo.
+
+A la hora de imputar, tenemos entonces un par de notaciones a tener en cuenta:
+•	``m = 5`` viene referido al número de veces que se imputa. Cinco es el valor por defecto.
+•	``meth = ‘rf’`` viene referido al método de imputación. En el ejemplo que vamos a mostrar vamos a usar Random Forests.
+
+Vamos a probar mice con el paquete ``Credit``, de forma aleatoria, convertimos a nulos 20 observaciones de la variable ``Income`` y ``Limit``.
+
+```r
+library(mice)
+library(ISLR)
+library(DMwR)
+
+Datos <- Credit
+Datos[sample(1:nrow(Datos), 20), "Income"] <- NA
+Datos[sample(1:nrow(Datos), 20), "Age"] <- NA
+```
+
+En ``MiceM`` vamos a guardar el modelo, usando el método de Random Forest y estableciendo el número de imputaciones creadas a 5. Hay que tener cuidado de no incluir la variable de respuesta al imputar, ya que al imputar en un entorno de prueba/producción, si sus datos contienen valores perdidos, no se podrá usar la variable de respuesta desconocida en ese momento. 
+
+```r
+miceM <- mice(Datos[, !names(Datos) %in% "Balance"], meth = "rf", m = 5)
+miceout <- complete(miceM, 3)
+```
+En ``miceout`` guardamos el resultado obtenido por la imputación. El siguiente paso será evaluar el modelo, por lo que en ``actuals`` guardamos las observaciones reales y en ``predict`` guardamos las observaciones imputadas. Finalmente, con ``regr.eval()`` del paquete ``DMwr`` evaluamos la imputación.
+
+```r
+actuals <- Credit$Age[is.na(Datos$Age)]
+predict <- miceout$Age[is.na(Datos$Age)]
+
+regr.eval(actuals, predict)
+```
+
+```r
+     mae         mse        rmse        mape 
+ 16.4000000 466.8000000  21.6055548   0.3680147
+
+```
+
+Podemos alternar entre los métodos de imputación con meth o entre las imputaciones creadas al establecer m. Es muy difícil obtener resultados totalmente fiables, por ello se recomienda que se tenga en consideración usar otros métodos de imputación, como los que ofrece ``rpart``, o imputando con la media/mediana/moda. 
+
+
