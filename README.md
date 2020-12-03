@@ -238,5 +238,7 @@ regr.eval(actuals, predict)
 
 Podemos alternar entre los métodos de imputación con meth o entre las imputaciones creadas al establecer m. Es muy difícil obtener resultados totalmente fiables, por ello se recomienda que se tenga en consideración usar otros métodos de imputación, como los que ofrece ``rpart``, o imputando con la media/mediana/moda. 
 
-mice es un paquete creado por Stef van Buuren, puedes consultar todo lo concerniente al paquete en el siguiente enlance https://cran.r-project.org/web/packages/mice/mice.pdf
+mice es un paquete creado por Stef van Buuren, puedes consultar todo lo concerniente al paquete en el siguiente enlance 
+
+[Documentación sobre mice](https://cran.r-project.org/web/packages/mice/mice.pdf)
 
