@@ -2,7 +2,7 @@ R es un ecosistema gigantesco, el cual aloja cientos y cientos de librerías par
 
 {EN CONSTRUCCIÓN}
 
-![Captura](https://user-images.githubusercontent.com/54073772/100720470-52bf3e80-33be-11eb-83b7-dfffe0a9bd13.PNG)
+![Captura](https://user-images.githubusercontent.com/54073772/101477538-a3e7a900-394f-11eb-80c7-e2ed0f2a8ebc.PNG)
 
 ## Tabla de contenidos
 
@@ -13,6 +13,7 @@ R es un ecosistema gigantesco, el cual aloja cientos y cientos de librerías par
 - [Ingeniería de características](#ingeniería-de-características)
   * [Boruta](#boruta)
   * [Mice](#mice)
+- [Machine Learning](#machine-learning)
 
 
 # Análisis descriptivo y visualización
@@ -241,4 +242,32 @@ Podemos alternar entre los métodos de imputación con meth o entre las imputaci
 mice es un paquete creado por Stef van Buuren, puedes consultar todo lo concerniente al paquete en el siguiente enlance 
 
 [Documentación sobre mice](https://cran.r-project.org/web/packages/mice/mice.pdf)
+
+
+## Mlr
+
+Uno de los problemas habituales a la hora de realizar Machine Learning en R ha sido la gran cantidad de paquetes diferentes para realizar esta función, véase ``caret``, ``glmnet`` o ``randomforest``. Esto puede suponer un problema si realmente queremos unificar nuestro código y nuestras tareas, por ello, el paquete ``mlr`` nos ofrece una solución completa, juntado los algoritmos de ML en un solo paquete, además de una gran cantidad de opciones ya sea para manejar hiperparametros, visualizaciones, ingeniería de características… 
+
+Se podría decir que el funcionamiento del paquete pasa por tres procesos:
+
+**Crear una tarea. Crear un learner. Entrenarlo.**
+
+### Crear una tarea
+
+Crear una tarea viene referido a cargar nuestros datos en el paquete. En este primer paso seleccionamos la variable a predecir, además, ``mlr`` nos pedirá que le asignemos un nombre a nuestra tarea, este nombre nos servirá más adelante para llamar a los resultados o realizar visualizaciones.
+
+Según el tipo de algoritmo que vayamos a usar existe una tarea específica, por ejemplo ``RegrTask()`` para problemas de regresión o ``ClassifTask()`` para problemas de clasificación.
+
+### Crear un learner
+
+Ya hemos creado una tarea, en la cual hemos decidido nuestra variable de respuesta y el tipo de problema al que nos vamos a enfrentar (regresión, clasificación…). En este segundo paso vamos a seleccionar el algoritmo especifico que queremos entrenar, ya sea una regresión lineal, un árbol de decisión, k-medias… Además de poder establecer hiperparámetros (el número de arboles a crear por un algoritmo bagging, el número de clúster por k-medias…), también podemos asignarle un nombre a nuestro learner para acceder a información de el. 
+
+### Entrenamiento 
+
+El último paso natural después de crear una tarea y un learner, entrenar el modelo, para ello, simplemente usamos ``task()`` pasándole la tarea, y el learner escogido.
+
+### Ejemplo con Credit
+
+Vamos a ver un ejemplo sencillo, mlr es un paquete gigantesco, y al unir tantísimos algoritmos y características, puede ser algo agotador explorar las tantísimas opciones y combinaciones, por lo que nos vamos a centrar en lo básico. En concreto, vamos a realizar una predicción sobre la variable de respuesta Balance de nuestro conocido paquete Credit, y vamos a entrenar un modelo lineal integrando glmnet dentro del paquete mlr.
+
 
