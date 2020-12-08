@@ -14,6 +14,7 @@ R es un ecosistema gigantesco, el cual aloja cientos y cientos de librerías par
   * [Boruta](#boruta)
   * [Mice](#mice)
 - [Machine Learning](#machine-learning)
+  * [Mlr](#mlr)
 
 
 # Análisis descriptivo y visualización
@@ -243,7 +244,7 @@ mice es un paquete creado por Stef van Buuren, puedes consultar todo lo concerni
 
 [Documentación sobre mice](https://cran.r-project.org/web/packages/mice/mice.pdf)
 
-
+# Machine Learning
 ## Mlr
 
 Uno de los problemas habituales a la hora de realizar Machine Learning en R ha sido la gran cantidad de paquetes diferentes para realizar esta función, véase ``caret``, ``glmnet`` o ``randomforest``. Esto puede suponer un problema si realmente queremos unificar nuestro código y nuestras tareas, por ello, el paquete ``mlr`` nos ofrece una solución completa, juntado los algoritmos de ML en un solo paquete, además de una gran cantidad de opciones ya sea para manejar hiperparametros, visualizaciones, ingeniería de características… 
