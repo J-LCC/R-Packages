@@ -245,6 +245,7 @@ mice es un paquete creado por Stef van Buuren, puedes consultar todo lo concerni
 [Documentación sobre mice](https://cran.r-project.org/web/packages/mice/mice.pdf)
 
 # Machine Learning
+R ofrece una cantidad gigantesca de paquetes para el Machine Learning, aunque la estrella para este tipo de tareas es Python, con una gran cantidad de paquetes unificados y potentes, R está ofreciendo en estos últimos años muchas soluciones para aplicar modelos de ML. 
 ## Mlr
 
 Uno de los problemas habituales a la hora de realizar Machine Learning en R ha sido la gran cantidad de paquetes diferentes para realizar esta función, véase ``caret``, ``glmnet`` o ``randomforest``. Esto puede suponer un problema si realmente queremos unificar nuestro código y nuestras tareas, por ello, el paquete ``mlr`` nos ofrece una solución completa, juntado los algoritmos de ML en un solo paquete, además de una gran cantidad de opciones ya sea para manejar hiperparametros, visualizaciones, ingeniería de características… 
@@ -399,6 +400,6 @@ Aggregated Result: mse.test.mean=0.2582402
 
 El resultado muestra el mse en cada interacción y el resultado agregado de todas las iteraciones, como vemos, se ha reducido el mse. 
 
-Esto ha sido un pequeño ejemplo de como usar mlr, el paquete es enorme y las posibilidad practicamente infinitas, no solo ofrece soluciones para crear modelos y testarlos, sino también para el proceso de limpiado de datos e ingenieria de caracteristicas. Toda la información y funciones de mlr se pueden consultar en el siguiente enlance:
+Esto ha sido un pequeño ejemplo de cómo usar mlr, el paquete es enorme y las posibilidad prácticamente infinitas, no solo ofrece soluciones para crear modelos y testarlos, sino también para el proceso de limpiado de datos e ingeniería de características. Toda la información y funciones de mlr se pueden consultar en el siguiente enlace:
 
 [Paquete mlr](https://mlr.mlr-org.com/)
