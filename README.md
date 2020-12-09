@@ -257,18 +257,148 @@ Se podría decir que el funcionamiento del paquete pasa por tres procesos:
 
 Crear una tarea viene referido a cargar nuestros datos en el paquete. En este primer paso seleccionamos la variable a predecir, además, ``mlr`` nos pedirá que le asignemos un nombre a nuestra tarea, este nombre nos servirá más adelante para llamar a los resultados o realizar visualizaciones.
 
-Según el tipo de algoritmo que vayamos a usar existe una tarea específica, por ejemplo ``RegrTask()`` para problemas de regresión o ``ClassifTask()`` para problemas de clasificación.
+Según el tipo de algoritmo que vayamos a usar existe una tarea específica, por ejemplo ``RegrTask()`` para problemas de regresión o ``ClassifTask()`` para problemas de clasificación. Podemos ver todos los tipos de tareas en el siguiente enlance:
+
+[Learning Tasks](https://mlr.mlr-org.com/articles/tutorial/task.html)
 
 ### Crear un learner
 
-Ya hemos creado una tarea, en la cual hemos decidido nuestra variable de respuesta y el tipo de problema al que nos vamos a enfrentar (regresión, clasificación…). En este segundo paso vamos a seleccionar el algoritmo especifico que queremos entrenar, ya sea una regresión lineal, un árbol de decisión, k-medias… Además de poder establecer hiperparámetros (el número de arboles a crear por un algoritmo bagging, el número de clúster por k-medias…), también podemos asignarle un nombre a nuestro learner para acceder a información de el. 
+Ya hemos creado una tarea, en la cual hemos decidido nuestra variable de respuesta y el tipo de problema al que nos vamos a enfrentar (regresión, clasificación…). En este segundo paso vamos a seleccionar el algoritmo especifico que queremos entrenar, ya sea una regresión lineal, un árbol de decisión, k-medias… Además de poder establecer hiperparámetros (el número de árboles a crear por un algoritmo bagging, el número de clúster por k-medias…), también podemos asignarle un nombre a nuestro learner para acceder a información de él. Para crear un learner usamos ``makeLearner()``, el algoritmo puede ser cualquiera que este suportado en R y mlr, por ejemplo, si queremos usar un algoritmo de clasificación Random Forest usamos "classif.randomForest". Tenemos más información de los distintos tipos de learners en el siguiente enlance:
+
+[Learners](https://mlr.mlr-org.com/articles/tutorial/learner.html)
 
 ### Entrenamiento 
 
 El último paso natural después de crear una tarea y un learner, entrenar el modelo, para ello, simplemente usamos ``task()`` pasándole la tarea, y el learner escogido.
 
-### Ejemplo con Credit
+### Ejemplo con BostonHousing
 
-Vamos a ver un ejemplo sencillo, mlr es un paquete gigantesco, y al unir tantísimos algoritmos y características, puede ser algo agotador explorar las tantísimas opciones y combinaciones, por lo que nos vamos a centrar en lo básico. En concreto, vamos a realizar una predicción sobre la variable de respuesta Balance de nuestro conocido paquete Credit, y vamos a entrenar un modelo lineal integrando glmnet dentro del paquete mlr.
+Vamos a ver un ejemplo sencillo, mlr es un paquete gigantesco, y al unir tantísimos algoritmos y características, puede ser algo agotador explorar las tantísimas opciones y combinaciones, por lo que nos vamos a centrar en lo básico. En concreto, vamos a realizar una predicción sobre la variable de respuesta medv del data.frame BostonHousing, y vamos a entrenar un modelo lineal integrando lm dentro del paquete mlr.
+
+Cargamos los datos de Boston, para ello usamos el data.frame del paquete mlbench, que contiene una versión mejorada del clásico paquete Boston. Excluimos la columna ‘town’ del dataset.
 
 
+
+```r
+library(mlbench)
+library(mlr)
+# Cargamos los datos
+Boston <- BostonHousing2[,-1]
+```
+
+Creamos la tarea con ``makeRegrTask()`` ya que nos estamos enfrentando a un problema de regresión, como decíamos, le pasamos un nombre, el data.frame y la variable objetivo a predecir.
+
+```r
+reg.task <- makeRegrTask(id = "cred", data = Boston, target = "medv")
+reg.task
+```
+
+```r
+Supervised task: cred
+Type: regr
+Target: medv
+Observations: 506
+Features:
+   numerics     factors     ordered functionals 
+         16           1           0           0 
+Missings: FALSE
+Has weights: FALSE
+Has blocking: FALSE
+Has coordinates: FALSE
+```
+
+Creamos a continuación un learner, para ello usamos la función ``makeLearner()`` y escogemos un algoritmo de regresión, en nuestro caso, el típico algoritmo ``lm`` para regresiones lineales.
+
+```r
+reg.learner <- makeLearner("regr.lm")
+```
+
+mlr también tiene una serie de funciones para el preprocesado de los datos, por ejemplo, para la selección de mejores características. Vamos a introducir la función ``generateFilterValuesData()`` para seleccionar las mejores variables. mlr soporta varios paquetes de R dedicados a la selección de características, esto lo vemos en el siguiente enlace:
+
+[Métodos de re-sampling](https://mlr.mlr-org.com/articles/tutorial/feature_selection.html#filter-methods)
+
+En nuestro caso usamos “party_cforest.importance” del paquete ``party``, basado en random forest. Después, únicamente pasamos la tarea que hemos creado y un criterio para la selección de las características. Con criterio nos podemos referir a un valor absoluto ``abs()``, por ejemplo seleccionando las 2 mejores variables o un porcentaje de las mejores variables usando ``perc()``, como por ejemplo el 25% de las mejores variables, este es el proceso que escogemos:
+
+```r
+fv <- generateFilterValuesData(reg.task, method = "party_cforest.importance")
+
+filtered.task <- filterFeatures(reg.task, fval = fv, perc = 0.25)
+filtered.task
+```
+
+```
+Supervised task: cred
+Type: regr
+Target: medv
+Observations: 506
+Features:
+   numerics     factors     ordered functionals 
+          4           0           0           0 
+Missings: FALSE
+Has weights: FALSE
+Has blocking: FALSE
+Has coordinates: FALSE
+```
+
+Nos quedamos con las 4 mejores variables para predecir medv.
+
+Entrenamos un modelo lineal simple y extraemos el modelo, para ello usamos ``train()`` al cual solo le pasamos el learner y la tarea, en nuestro caso, la tarea con las mejores variables filtradas.
+
+```r
+mod <- train(reg.learner, filtered.task)
+getLearnerModel(mod)
+```
+
+```r
+Call:
+stats::lm(formula = f, data = d)
+
+Coefficients:
+(Intercept)        cmedv           rm      ptratio        lstat  
+   0.120060     1.000892     0.014511    -0.016531     0.006139
+```
+
+Lo único que nos quedaría es valorar el modelo, para ello realizamos predicciones y calcular el mse. Volvemos a entrenar el modelo, pero esta vez con una muestra de los datos, los cual servirán para el entrenamiento, dejando unos pocos datos para testarlos posteriormente. Con ``predict()`` podemos realizar estimaciones a partir de los datos que no se han usado en el entrenamiento y por último, con performance() medimos la calidad de la predicción dándonos como resultado el mse (por lo general, cuanto menor es el mse de predicción mejor).
+
+```r
+n <- getTaskSize(reg.task)
+
+mod <- train(reg.learner, task = reg.task, subset = seq(1, n, 2))
+pred <- predict(mod, task = reg.task, subset = seq(2, n, 2))
+
+performance(pred)
+```
+
+```r
+      mse 
+0.3034715
+```
+
+Este proceso sencillo no suele ser el habitual cuando se entrena un algoritmo de machine learning y **el usuario tiene que tener en cuenta más factores a la hora de entrenar su modelo**, lo típico es usar, al menos, un método de resampling como K-Fold Cross Validation para mejorar la precisión y el rendimiento de un modelo. mlr permite la introducción de estos métodos, vamos a verlo con un ejemplo.
+
+El funcionamiento es muy sencillo, se crea un objeto con ``makeResampleDesc()`` donde se define el método de resampleo que queremos, y para nuestro caso con CV, el número de iteraciones. Después, con la función ``resample()`` testamos nuestro modelo, pasándole nuestro algoritmo, la tarea filtrada y el método de resampleo. 
+
+```r
+rdesc <- makeResampleDesc("CV", iters = 5)
+rdesc
+
+r <- resample("regr.lm", filtered.task, rdesc)
+```
+
+```r
+Resampling: cross-validation
+Measures:             mse       
+[Resample] iter 1:    0.0033685 
+[Resample] iter 2:    0.4955673 
+[Resample] iter 3:    0.2906667 
+[Resample] iter 4:    0.4957825 
+[Resample] iter 5:    0.0058160 
+
+Aggregated Result: mse.test.mean=0.2582402
+```
+
+El resultado muestra el mse en cada interacción y el resultado agregado de todas las iteraciones, como vemos, se ha reducido el mse. 
+
+Esto ha sido un pequeño ejemplo de como usar mlr, el paquete es enorme y las posibilidad practicamente infinitas, no solo ofrece soluciones para crear modelos y testarlos, sino también para el proceso de limpiado de datos e ingenieria de caracteristicas. Toda la información y funciones de mlr se pueden consultar en el siguiente enlance:
+
+[Paquete mlr](https://mlr.mlr-org.com/)
