@@ -39,6 +39,7 @@ rm(list = ls())
 # Nos permite crear tablas interactivas y realizar varios calculos de agrupación y agregación
 
 library(reactable)
+library(ISLR)
 
 
 Datos <- Credit 
@@ -132,15 +133,21 @@ pander::pander(result)
 rm(list = ls())
 
 
-# ----------------- mice, VIM ----------------------------
+
+
+# ----------------- mice ----------------------------
 
 # mice realiza multiples imputaciones de NAs
 # mice() crea el modelo, dm controla el número de veces que se imputa
 # complete() aplica la imputación a los datos
 
 library(mice)
+library(ISLR)
+library(DMwR)
 
 methods(mice)
+
+
 
 # Vamos a usar Credit y asignar unos cuantos valores nulos de forma aleatoria
 Datos <- Credit
@@ -148,4 +155,83 @@ Datos <- Credit
 Datos[sample(1:nrow(Datos), 20), "Income"] <- NA
 Datos[sample(1:nrow(Datos), 20), "Age"] <- NA
 
+# Usamos imputación por random forest, estableciendo m a su valor de por defecto 5
 
+miceM <- mice(Datos[, !names(Datos) %in% "Balance"], meth = "rf", m = 5)
+
+miceout <- complete(miceM, 3)
+
+# Evaluamos la calidad de la precisión
+
+actuals <- Credit$Age[is.na(Datos$Age)]
+predict <- miceout$Age[is.na(Datos$Age)]
+
+regr.eval(actuals, predict)
+
+
+# Limpiamos en entorno de trabajo
+
+rm(list = ls())
+
+
+
+
+
+# ------------- mlr ------------------------
+
+# Cargamos los datos de Boston
+
+library(mlbench)
+library(mlr)
+
+
+# Cargamos los datos
+Boston <- BostonHousing2[,-1]
+
+# Creamos una tarea
+
+reg.task <- makeRegrTask(id = "cred", data = Boston, target = "medv")
+reg.task
+
+# Con listLearners("regr") listamos los que hay disponibles
+
+listLearners("regr")
+
+
+# Creamos un learner de regresión basado en lm
+
+reg.learner <- makeLearner("regr.lm")
+
+# Realizamos una selección de las mejores caracteristicas 
+# mlr permite esta opción
+
+# Usamos el método del paquete party "party_cforest.importance"
+fv <- generateFilterValuesData(reg.task, method = "party_cforest.importance")
+
+filtered.task <- filterFeatures(reg.task, fval = fv, perc = 0.25)
+filtered.task
+
+# Entrenamos un modelo lineal simple y extraemos el modelo
+
+mod <- train(reg.learner, filtered.task)
+
+getLearnerModel(mod)
+
+# Realizamos predicciones y vemos el mse
+
+n <- getTaskSize(reg.task)
+
+mod <- train(reg.learner, task = reg.task, subset = seq(1, n, 2))
+pred <- predict(mod, task = reg.task, subset = seq(2, n, 2))
+
+performance(pred)
+
+# Esto seria lo más simple que podemos realizar, en la realidad hay que tener en cuenta mas cosas
+
+# Vamos a usar k-fold cross validation para aumentar la precisión
+# Funciona como crear un learner, creamos un método de resampling 
+
+rdesc <- makeResampleDesc("CV", iters = 5)
+rdesc
+
+r <- resample("regr.lm", filtered.task, rdesc)
